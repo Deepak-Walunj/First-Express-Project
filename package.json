@@ -29,6 +29,7 @@
   "dependencies": {
     "fs": "^0.0.1-security",
     "mongodb": "^6.18.0",
-    "pino": "^9.8.0"
+    "pino": "^9.8.0",
+    "uuid": "^11.1.0"
   }
 }
