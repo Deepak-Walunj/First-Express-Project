@@ -1,0 +1,27 @@
+require('dotenv').config()
+const path = require('path');
+
+module.exports = {
+    APP_NAME: process.env.APP_NAME || 'Express Backend',
+  	ENV: process.env.NODE_ENV || 'development',
+  	DEBUG: process.env.DEBUG === 'true',
+  	API_PREFIX: process.env.API_PREFIX || '/api',
+
+    MONGODB_URL: process.env.MONGODB_URL,
+  	MONGODB_DB_NAME: process.env.MONGODB_DB_NAME,
+
+    SECRET_KEY: process.env.SECRET_KEY,
+    ACCESS_TOKEN_EXPIRE_MINUTES: parseInt(process.env.ACCESS_TOKEN_EXPIRE_MINUTES || '30'),
+  	REFRESH_TOKEN_EXPIRE_DAYS: parseInt(process.env.REFRESH_TOKEN_EXPIRE_DAYS || '7'),
+  	ALGORITHM: process.env.ALGORITHM || 'HS256',
+
+    ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS? process.env.ALLOWED_ORIGINS.split(',') : ['http://localhost:3000', 'http://localhost:5173'],
+  	ARTIFACTS_DIR: path.join(__dirname, '..', 'artifacts'),
+    PORT: process.env.PORT || 5000,
+
+	LOG_LEVEL: process.env.LOG_LEVEL, 
+	LOG_FORMAT: process.env.LOG_FORMAT, 
+	ENABLE_CONSOLE_LOGGING: process.env.ENABLE_CONSOLE_LOGGING, 
+	ENABLE_FILE_LOGGING: process.env.ENABLE_FILE_LOGGING, 
+	LOG_FILE_PATH: process.env.LOG_FILE_PATH
+}
