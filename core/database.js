@@ -1,6 +1,6 @@
 const {MongoClient} = require('mongodb')
-const { MONGODB_URL, MONGODB_DB_NAME } = require('../settings');
-const { initializeCollections, checkCollectionHealth } = require('./databaseInit');
+const { MONGODB_URL, MONGODB_DB_NAME } = require('./settings');
+const { initializeCollections, checkCollectionHealth } = require('./database_init');
 const logger = require('./logger')
 
 let client

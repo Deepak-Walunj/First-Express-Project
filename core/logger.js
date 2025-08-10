@@ -1,7 +1,5 @@
-const pino = require('./pino')
+const pino = require('pino')
 const { LOG_LEVEL, LOG_FORMAT, ENABLE_CONSOLE_LOGGING, ENABLE_FILE_LOGGING, LOG_FILE_PATH } = require('./settings');
-const fs = require('fs');
-
 
 let transport;
 
