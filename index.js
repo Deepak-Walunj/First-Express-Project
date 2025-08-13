@@ -2,12 +2,11 @@
 const express = require('express');
 const cors = require('cors');
 const { PORT, API_PREFIX, ALLOWED_ORIGINS } = require('./core/settings');
-const { connectDB, disconnectDB } = require('./core/database');
+const {disconnectDB } = require('./core/database');
 const { initializeDependencies } = require('./core/deps');
 const { appExceptionHandler, validationExceptionHandler, genericExceptionHandler } = require('./middleware/errorHandler');
 const requestId = require('./middleware/requestId');
-const logger = require('./core/logger').getLogger(__filename);
-const setupLogging = require('./core/logger').setupLogging;
+const { setupLogging, getLogger } = require('./core/logger');
 
 // Routes
 // const authRouter = require('./routes/authRoutes');
@@ -19,6 +18,7 @@ const setupLogging = require('./core/logger').setupLogging;
 (async function main() {
   const app = express();
   setupLogging();
+  const logger = getLogger("main");
   logger.info('Starting Backend (Express)');
 
   try {
@@ -59,9 +59,16 @@ const setupLogging = require('./core/logger').setupLogging;
     });
 
     // Shutdown hooks
-    process.on('SIGINT', () => {
+    process.on('SIGINT', async () => {
       disconnectDB();
       logger.info('Application shutdown complete');
+      if (global.logger && global.logger.flush) {
+        try {
+          await global.logger.flush(); // flush pino logs
+        } catch (err) {
+          logger.error("Error flushing logs:", err);
+        }
+      }
       process.exit(0);
     });
 

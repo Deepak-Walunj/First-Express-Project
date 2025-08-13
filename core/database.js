@@ -1,10 +1,13 @@
 const {MongoClient} = require('mongodb')
 const { MONGODB_URL, MONGODB_DB_NAME } = require('./settings');
 const { initializeCollections, checkCollectionHealth } = require('./database_init');
-const logger = require('./logger')
+const { setupLogging, getLogger } = require('./logger');
 
 let client
 let db
+setupLogging();
+const logger = getLogger("main");
+logger.info('In database.js');
 
 async function connectDB(){
     try{
@@ -14,13 +17,12 @@ async function connectDB(){
 
         await initializeCollections(db)
         if (!(await checkCollectionHealth(db))){
-            throw new Error('Database health check failed');
+            logger.error('Database health check failed');
         }
         logger.info(`Connected to mongoDb: ${MONGODB_URL}`)
     }catch(err){
-        logger.error(`DB connection failed ${err}`)
         disconnectDB()
-        throw err
+        logger.error(`DB connection failed ${err}`)
     }
 }
 
@@ -34,7 +36,7 @@ async function disconnectDB() {
 }
 
 function getDB() {
-    if (!db) throw new Error('Database not connected');
+    if (!db) logger.error('Database not connected');
     return db;
 }
 

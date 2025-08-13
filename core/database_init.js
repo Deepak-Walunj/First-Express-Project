@@ -1,4 +1,8 @@
 const collections = require("./collections")
+const { setupLogging, getLogger } = require('./logger');
+setupLogging();
+const logger = getLogger("main");
+logger.info('Starting Backend (Express)');
 
 const REQUIRED_COLLECTIONS = [
     collections.ADMINS,
@@ -12,7 +16,7 @@ async function initializeCollections(db){
     for (const name of REQUIRED_COLLECTIONS){
         if ( !existingNames.includes(name)){
             await db.createCollection(name);
-            console.log(`Created collection: ${name}`);
+            logger.info(`Created collection: ${name}`);
         }
         await createIndexes(db, name)
     }

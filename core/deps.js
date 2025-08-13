@@ -1,7 +1,10 @@
 const express = require('express');
 const { getDB, connectDB} = require('./database')
 const collections = require('./collections')
-
+const { setupLogging, getLogger } = require('../core/logger');
+setupLogging();
+const logger = getLogger("main");
+logger.info('In deps.js');
 // const AuthRepository = require('../repositories/AuthRepository');
 // const CandidateRepository = require('../repositories/CandidateRepository');
 
@@ -12,7 +15,7 @@ let dependencyStorage = null;
 
 class DependencyStorage{
     constructor(db){
-        if (!db) throw new Error('Database not initialized');
+        if (!db) logger.error('Database not initialized');
         // this.authRepo = new AuthRepository(db.collection(collections.AUTH_USERS));
         // this.candidateRepo = new CandidateRepository(db.collection(collections.CANDIDATES));
         
