@@ -6,7 +6,7 @@ const { setupLogging, getLogger } = require('./logger');
 let client
 let db
 setupLogging();
-const logger = getLogger("main");
+const logger = getLogger("database");
 logger.info('In database.js');
 
 async function connectDB(){

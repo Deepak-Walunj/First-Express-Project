@@ -1,12 +1,13 @@
 const collections = require("./collections")
 const { setupLogging, getLogger } = require('./logger');
 setupLogging();
-const logger = getLogger("main");
+const logger = getLogger("database_init");
 logger.info('Starting Backend (Express)');
 
 const REQUIRED_COLLECTIONS = [
     collections.ADMINS,
     collections.USERS,
+    collections.AUTH_USERS,
 ]
 
 async function initializeCollections(db){

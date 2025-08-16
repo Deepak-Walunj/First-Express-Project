@@ -2,7 +2,7 @@ const { AppError } = require('../core/exception');
 const { setupLogging, getLogger } = require('../core/logger');
 
 setupLogging();
-const logger = getLogger("main");
+const logger = getLogger("errorHandler");
 logger.info('In errorHandler.js');
 
 // Handles custom AppError exceptions

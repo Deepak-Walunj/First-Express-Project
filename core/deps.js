@@ -1,58 +1,88 @@
-const express = require('express');
 const { getDB, connectDB} = require('./database')
 const collections = require('./collections')
 const { setupLogging, getLogger } = require('../core/logger');
 setupLogging();
-const logger = getLogger("main");
+const logger = getLogger("deps");
 logger.info('In deps.js');
-// const AuthRepository = require('../repositories/AuthRepository');
-// const CandidateRepository = require('../repositories/CandidateRepository');
+const AuthRepository = require('../repositories/AuthRepository');
+const UserRepository = require('../repositories/UserRepository');
+// const AdminRepository = require('../repositories/AdminRepository');
 
-// const AuthService = require('../services/AuthService');
-// const CandidateService = require('../services/CandidateService');
+const AuthService = require('../services/AuthService');
+const UserService = require('../services/UserService');
+// const AdminService = require('../services/AdminService');
 
 let dependencyStorage = null;
 
 class DependencyStorage{
     constructor(db){
         if (!db) logger.error('Database not initialized');
-        // this.authRepo = new AuthRepository(db.collection(collections.AUTH_USERS));
-        // this.candidateRepo = new CandidateRepository(db.collection(collections.CANDIDATES));
+        this.userRepo = new UserRepository(db.collection(collections.USERS));
+        this.authRepo = new AuthRepository(db.collection(collections.AUTH_USERS));
+        // this.adminRepo = new AdminRepository(db.collection(collections.ADMINS));
         
-        // this.authService = new AuthService({ authRepository: this.authRepo });
-        // this.candidateService = new CandidateService({ candidateRepository: this.candidateRepo });
+        this.authService = new AuthService({ authRepository: this.authRepo });
+        this.userService = new UserService({ userRepository: this.userRepo });
+        // this.adminService = new AdminService({ adminRepository: this.adminRepo})
         }
-    // getAuthRepository() {
-    //     return this.authRepo;
+    getAuthRepository() {
+        return this.authRepo;
+    }
+    getUserRepository() {
+        return this.userRepo;
+    }
+    // getAdminRepository() {
+    //     return this.adminRepo;
     // }
-    // getCandidateRepository() {
-    //     return this.candidateRepo;
-    // }
-    // getAuthService() {
-    //     return this.authService;
-    // }
-    // getCandidateService() {
-    //     return this.candidateService;
+    getAuthService() {
+        return this.authService;
+    }
+    getUserService() {
+        return this.userService;
+    }
+    // getAdminService() {
+    //     return this.adminService;
     // }
 }
 
 async function initializeDependencies() {
-  await connectDB();
-  const db = getDB();
+  // await connectDB();
+  // const db = getDB();
+  const db = []
   dependencyStorage = new DependencyStorage(db);
 }
 
-// function getAuthRepository() {
+function getAuthRepository() {
+  if (!dependencyStorage) throw new Error('Dependencies not initialized');
+  return dependencyStorage.getAuthRepository();
+}
+function getUserRepository() {
+  if (!dependencyStorage) throw new Error('Dependencies not initialized');
+  return dependencyStorage.getUserRepository();
+}
+// function getAdminRepository() {
 //   if (!dependencyStorage) throw new Error('Dependencies not initialized');
-//   return dependencyStorage.getAuthRepository();
+//   return dependencyStorage.getAdminRepository();
 // }
-// function getAuthService() {
+function getAuthService() {
+  if (!dependencyStorage) throw new Error('Dependencies not initialized');
+  return dependencyStorage.getAuthService();
+}
+function getUserService() {
+  if (!dependencyStorage) throw new Error('Dependencies not initialized');
+  return dependencyStorage.getUserService();
+}
+// function getAdminService() {
 //   if (!dependencyStorage) throw new Error('Dependencies not initialized');
-//   return dependencyStorage.getAuthService();
+//   return dependencyStorage.getAdminService();
 // }
 
 module.exports = {
   initializeDependencies,
-//   getAuthRepository,
-//   getAuthService,
+  getAuthRepository,
+  getUserRepository,
+  // getAdminRepository,
+  getAuthService,
+  getUserService,
+  // getAdminService
 };
