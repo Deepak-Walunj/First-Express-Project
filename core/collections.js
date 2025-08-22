@@ -1,7 +1,7 @@
 module.exports = {
-    AUTH_USERS: 'authenticated_users',
     USERS : 'users',
     ADMINS : 'admins',
+    AUTH_USERS: 'auth_users',
 
     getAll() {
         return Object.values(this).filter(v => typeof v === 'string')
