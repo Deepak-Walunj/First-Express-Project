@@ -4,12 +4,12 @@ const { setupLogging, getLogger } = require('../core/logger');
 setupLogging();
 const logger = getLogger("deps");
 logger.info('In deps.js');
-const AuthRepository = require('../repositories/AuthRepository');
-const UserRepository = require('../repositories/UserRepository');
+const AuthRepository = require('../repositories/authRepository');
+const UserRepository = require('../repositories/userRepository');
 // const AdminRepository = require('../repositories/AdminRepository');
 
-const AuthService = require('../services/AuthService');
-const UserService = require('../services/UserService');
+const AuthService = require('../services/authService');
+const UserService = require('../services/userService');
 // const AdminService = require('../services/AdminService');
 
 let dependencyStorage = null;
@@ -22,7 +22,7 @@ class DependencyStorage{
         // this.adminRepo = new AdminRepository(db.collection(collections.ADMINS));
         
         this.authService = new AuthService({ authRepository: this.authRepo });
-        this.userService = new UserService({ userRepository: this.userRepo });
+        this.userService = new UserService({ userRepository: this.userRepo, auth_service: this.authService });
         // this.adminService = new AdminService({ adminRepository: this.adminRepo})
         }
     getAuthRepository() {
@@ -46,9 +46,8 @@ class DependencyStorage{
 }
 
 async function initializeDependencies() {
-  // await connectDB();
-  // const db = getDB();
-  const db = []
+  await connectDB();
+  const db = getDB();
   dependencyStorage = new DependencyStorage(db);
 }
 

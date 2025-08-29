@@ -4,13 +4,13 @@ const cors = require('cors');
 const { PORT, API_PREFIX, ALLOWED_ORIGINS } = require('./core/settings');
 const {disconnectDB } = require('./core/database');
 const { initializeDependencies } = require('./core/deps');
-const { appExceptionHandler, validationExceptionHandler, genericExceptionHandler } = require('./middleware/errorHandler');
+const { appExceptionHandler, validationExceptionHandler, genericExceptionHandler} = require('./middleware/errorHandler');
 const requestId = require('./middleware/requestId');
 const { setupLogging, getLogger } = require('./core/logger');
 
 // Routes
 // const authRouter = require('./routes/authRoutes');
-// const candidateRouter = require('./routes/candidateRoutes');
+const userRouter = require('./routes/userRoutes');
 // const companyRouter = require('./routes/companyRoutes');
 // const interviewRouter = require('./routes/interviewRoutes');
 // const dashboardRouter = require('./routes/dashboardRoutes');
@@ -38,7 +38,7 @@ const { setupLogging, getLogger } = require('./core/logger');
 
     // Routes
     // app.use(`${API_PREFIX}/auth`, authRouter);
-    // app.use(`${API_PREFIX}/candidate`, candidateRouter);
+    app.use(`${API_PREFIX}/user`, userRouter);
     // app.use(`${API_PREFIX}/company`, companyRouter);
     // app.use(`${API_PREFIX}/interview`, interviewRouter);
     // app.use(`${API_PREFIX}/analytical-dashboard`, dashboardRouter);

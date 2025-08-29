@@ -7,6 +7,12 @@ class AppError extends Error {
     }
 }
 
+class ValidationError extends AppError {
+    constructor(message = 'Validation Error') {
+        super(message, 400, 'VALIDATION_ERROR');
+    }
+}
+
 class InvalidCredentialsError extends AppError{
     constructor(message='Invalid Credentials'){
         super(message, 401, 'INVALID_CREDENTIALS');
@@ -19,8 +25,16 @@ class UnauthorizedError extends AppError {
     }
 }
 
+class DuplicateRequestException extends AppError {
+    constructor(message = 'Duplicate request') {
+        super(message, 409, 'DUPLICATE_REQUEST');
+    }
+}
+
 module.exports = {
     AppError,
     InvalidCredentialsError,
-    UnauthorizedError
+    UnauthorizedError,
+    DuplicateRequestException,
+    ValidationError
 };
