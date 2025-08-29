@@ -4,7 +4,6 @@ module.exports = {
     APP_NAME: process.env.APP_NAME || 'Express Backend',
   	ENV: process.env.NODE_ENV || 'development',
   	DEBUG: process.env.DEBUG === 'true',
-  	API_PREFIX: process.env.API_PREFIX || '/api',
 
     MONGODB_URL: process.env.MONGODB_URL,
   	MONGODB_DB_NAME: process.env.MONGODB_DB_NAME,

@@ -11,7 +11,6 @@ const logger = getLogger("user-router");
 router.post('/register', async (req, res, next) => {
   const userService = getUserService()
   const { error, value } = registerUserSchema.validate(req.body);
-
   if (error){
     return next(new ValidationError(error.message, 400, 'VALIDATION_ERROR'));
   }
@@ -23,9 +22,9 @@ router.post('/register', async (req, res, next) => {
       data: user
     })
   }catch(err){
-    logger.error("Error registering user", err);
+    logger.error({ err }, "Error registering user");
+    return next(err);
   }
-
 });
 
 module.exports = router;

@@ -1,7 +1,7 @@
 // index.js
 const express = require('express');
 const cors = require('cors');
-const { PORT, API_PREFIX, ALLOWED_ORIGINS } = require('./core/settings');
+const { PORT, ALLOWED_ORIGINS } = require('./core/settings');
 const {disconnectDB } = require('./core/database');
 const { initializeDependencies } = require('./core/deps');
 const { appExceptionHandler, validationExceptionHandler, genericExceptionHandler} = require('./middleware/errorHandler');
@@ -38,7 +38,7 @@ const userRouter = require('./routes/userRoutes');
 
     // Routes
     // app.use(`${API_PREFIX}/auth`, authRouter);
-    app.use(`${API_PREFIX}/user`, userRouter);
+    app.use(`/user`, userRouter);
     // app.use(`${API_PREFIX}/company`, companyRouter);
     // app.use(`${API_PREFIX}/interview`, interviewRouter);
     // app.use(`${API_PREFIX}/analytical-dashboard`, dashboardRouter);

@@ -1,34 +1,30 @@
-const { withBaseSchema } = require("./base");
-const { EntityType } = require("../core/enum");
-const { v4: uuidv4 } = require('uuid');
+const Joi = require('joi');
+const { EntityType } = require('../core/enum');
+const {v4: uuidv4} = require("uuid");
 
-const AuthUserSchema = withBaseSchema({
-  userId: {
-    type: String,
-    default: uuidv4,
-    index: true,
-    unique: true
-  },
-  email: {
-    type: String,
-    required: false,
-    unique: true,
-    sparse: true, // allow null
-    lowercase: true,
-    trim: true
-  },
-  hashed_password: {
-    type: String,
-    required: true
-  },
-  entity_type: {
-    type: String,
-    enum: Object.values(EntityType),
-    required: true
-  }
+const now = () => new Date().toISOString();
+
+const AuthUserSchema  = Joi.object({
+  userId: Joi.string().default(()=>uuidv4).description("unique user ID"), // can be auto-generated
+  email: Joi.string().email().required().messages({
+    "string.email": "Valid email is required",
+    "string.empty": "Email is required"
+  }),
+  hashed_password: Joi.string().min(6).required().messages({
+    "string.min": "Password must be at least 6 characters long",
+    "string.empty": "Password is required"
+  }),
+  entity_type: Joi.string()
+    .valid(...Object.values(EntityType))
+    .required()
+    .messages({
+      "any.only": `Entity type must be one of: ${Object.values(EntityType).join(', ')}`,
+      "string.empty": "Entity type is required"
+    }),
+  createdAt: Joi.date().default(now).description("Timestamp when the user was created"),
+  updatedAt: Joi.date().default(now).description("Timestamp when the user was last updated"),
 });
 
-
 module.exports = {
-    AuthUserSchema,
-}
+  AuthUserSchema
+};
