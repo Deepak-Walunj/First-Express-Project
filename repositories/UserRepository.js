@@ -1,4 +1,7 @@
+const { setupLogging, getLogger } = require('../core/logger');
 
+setupLogging();
+const logger = getLogger("user-repo");
 
 class UserRepository {
     constructor(collection) {

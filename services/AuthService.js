@@ -11,7 +11,7 @@ class AuthService {
     constructor({ authRepository }) {
         this.authRepository = authRepository;
     }
-    async registerUser(data) {
+    async registerEntity(data) {
         const { error, value } = EntityRegisterSchema.validate({
             name: data.name,
             email: data.email,
@@ -34,8 +34,8 @@ class AuthService {
             entity_type: value.entity_type
         }, { stripUnknown: true });
         logger.info(`Creating user with data: ${JSON.stringify(auth_user.value)}`);
-        const newUser = await this.authRepository.createUser(auth_user.value);
-        logger.info(`User registered with ID: ${newUser._id} in AUTH_USER collection`);
+        const newUser = await this.authRepository.createAuthEntity(auth_user.value);
+        logger.info(`User registered with ID: ${newUser.userId} in AUTH_USER collection`);
         return newUser;
     }
     // async validateUser(username, password) {

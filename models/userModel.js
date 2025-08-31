@@ -1,4 +1,3 @@
-const { withBaseSchema } = require("./base");
 const Joi = require("joi");
 const {v4: uuidv4} = require("uuid");
 
@@ -13,8 +12,8 @@ const UserProfileSchema = Joi.object({
     "string.email": "Valid email is required",
     "string.empty": "Email is required"
   }),
-  created_at: Joi.date().default(now),
-  updated_at: Joi.date().default(now),
+  createdAt: Joi.date().default(now).description("Timestamp when the user was created"),
+  updatedAt: Joi.date().default(now).description("Timestamp when the user was last updated"),
 });
 
 module.exports = { UserProfileSchema } ;

@@ -54,6 +54,7 @@ function genericExceptionHandler(err, req, res, next) {
   res.status(500).json(response);
 }
 
+
 module.exports = {
   appExceptionHandler,
   validationExceptionHandler,

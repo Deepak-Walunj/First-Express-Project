@@ -26,8 +26,8 @@ class UnauthorizedError extends AppError {
 }
 
 class DuplicateRequestException extends AppError {
-    constructor(message = 'Duplicate request') {
-        super(message, 409, 'DUPLICATE_REQUEST');
+    constructor(message = 'Duplicate request',  details = {}) {
+        super(message, 409, 'DUPLICATE_REQUEST', details);
     }
 }
 

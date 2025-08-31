@@ -15,13 +15,17 @@ class UserService {
 
     async registerUser(data){
         try{
-        const user = await this.auth_service.registerUser(data);
-        const profile_schema = UserProfileSchema.validate({
-            userId: user._id,
-            full_name: data.full_name,
+        const user = await this.auth_service.registerEntity(data);
+        const {error, value} = UserProfileSchema.validate({
+            userId: user.userId,
+            full_name: data.name,
             email: data.email,
-        });
-        const profile = await this.userRepository.createProfile(profile_schema.value);
+        }, { stripUnknown: true });
+        if (error) {
+            throw new InvalidCredentialsError(error.message);
+        }
+        logger.info(`Creating user profile with data: ${JSON.stringify(value)}`);
+        const profile = await this.userRepository.createProfile(value);
         return profile
     }catch(err){
         logger.error({ err }, "Error in registerUser");
