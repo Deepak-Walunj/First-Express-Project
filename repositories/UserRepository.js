@@ -13,13 +13,13 @@ class UserRepository {
         return { ...userData, _id: result.insertedId };
     }
 
-    async findByEmail(email) {
-        return await this.UserModel.findOne({ email });
-    }
+    // async findByEmail(email) {
+    //     return await this.UserModel.findOne({ email });
+    // }
 
-    async findById(id) {
-        return await this.UserModel.findById(id);
-    }
+    // async findById(id) {
+    //     return await this.UserModel.findById(id);
+    // }
 
 }
 

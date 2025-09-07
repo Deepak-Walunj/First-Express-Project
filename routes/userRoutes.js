@@ -12,19 +12,14 @@ router.post('/register', async (req, res, next) => {
   const userService = getUserService()
   const { error, value } = registerUserSchema.validate(req.body);
   if (error){
-    return next(new ValidationError(error.message, 400, 'VALIDATION_ERROR'));
+    return next(new ValidationError(error.message, 400, 'VALIDATION_ERROR', error.details));
   }
-  try{
-    const user = await userService.registerUser(value);
-    return res.status(201).json({
-      success: true,
-      message: 'User registered successfully',
-      data: user
-    })
-  }catch(err){
-    logger.error({ err }, "Error registering user");
-    return next(err);
-  }
+  const user = await userService.registerUser(value);
+  return res.status(201).json({
+    success: true,
+    message: 'User registered successfully',
+    data: user
+  })
 });
 
 module.exports = router;

@@ -6,11 +6,11 @@ const logger = getLogger("deps");
 logger.info('In deps.js');
 const AuthRepository = require('../repositories/authRepository');
 const UserRepository = require('../repositories/userRepository');
-// const AdminRepository = require('../repositories/AdminRepository');
+const AdminRepository = require('../repositories/adminRepository');
 
 const AuthService = require('../services/authService');
 const UserService = require('../services/userService');
-// const AdminService = require('../services/AdminService');
+const AdminService = require('../services/AdminService');
 
 let dependencyStorage = null;
 
@@ -19,11 +19,11 @@ class DependencyStorage{
         if (!db) logger.error('Database not initialized');
         this.userRepo = new UserRepository(db.collection(collections.USERS));
         this.authRepo = new AuthRepository(db.collection(collections.AUTH_USERS));
-        // this.adminRepo = new AdminRepository(db.collection(collections.ADMINS));
+        this.adminRepo = new AdminRepository(db.collection(collections.ADMINS));
         
         this.authService = new AuthService({ authRepository: this.authRepo });
         this.userService = new UserService({ userRepository: this.userRepo, auth_service: this.authService });
-        // this.adminService = new AdminService({ adminRepository: this.adminRepo})
+        this.adminService = new AdminService({ adminRepository: this.adminRepo, auth_service: this.authService });
         }
     getAuthRepository() {
         return this.authRepo;
@@ -31,18 +31,18 @@ class DependencyStorage{
     getUserRepository() {
         return this.userRepo;
     }
-    // getAdminRepository() {
-    //     return this.adminRepo;
-    // }
+    getAdminRepository() {
+        return this.adminRepo;
+    }
     getAuthService() {
         return this.authService;
     }
     getUserService() {
         return this.userService;
     }
-    // getAdminService() {
-    //     return this.adminService;
-    // }
+    getAdminService() {
+        return this.adminService;
+    }
 }
 
 async function initializeDependencies() {
@@ -59,10 +59,10 @@ function getUserRepository() {
   if (!dependencyStorage) throw new Error('Dependencies not initialized');
   return dependencyStorage.getUserRepository();
 }
-// function getAdminRepository() {
-//   if (!dependencyStorage) throw new Error('Dependencies not initialized');
-//   return dependencyStorage.getAdminRepository();
-// }
+function getAdminRepository() {
+  if (!dependencyStorage) throw new Error('Dependencies not initialized');
+  return dependencyStorage.getAdminRepository();
+}
 function getAuthService() {
   if (!dependencyStorage) throw new Error('Dependencies not initialized');
   return dependencyStorage.getAuthService();
@@ -71,17 +71,17 @@ function getUserService() {
   if (!dependencyStorage) throw new Error('Dependencies not initialized');
   return dependencyStorage.getUserService();
 }
-// function getAdminService() {
-//   if (!dependencyStorage) throw new Error('Dependencies not initialized');
-//   return dependencyStorage.getAdminService();
-// }
+function getAdminService() {
+  if (!dependencyStorage) throw new Error('Dependencies not initialized');
+  return dependencyStorage.getAdminService();
+}
 
 module.exports = {
   initializeDependencies,
   getAuthRepository,
   getUserRepository,
-  // getAdminRepository,
+  getAdminRepository,
   getAuthService,
   getUserService,
-  // getAdminService
+  getAdminService,
 };

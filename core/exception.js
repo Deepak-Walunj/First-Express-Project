@@ -8,26 +8,32 @@ class AppError extends Error {
 }
 
 class ValidationError extends AppError {
-    constructor(message = 'Validation Error') {
-        super(message, 400, 'VALIDATION_ERROR');
+    constructor(message = 'Validation Error', statusCode = 400, errorCode='VALIDATION_ERROR', details = {}) {
+        super(message, statusCode, errorCode, details);
     }
 }
 
 class InvalidCredentialsError extends AppError{
-    constructor(message='Invalid Credentials'){
-        super(message, 401, 'INVALID_CREDENTIALS');
+    constructor(message='Invalid Credentials', statusCode = 401, errorCode = 'INVALID_CREDENTIALS' ,details={}) {
+        super(message, statusCode, errorCode, details);
     }
 }
 
 class UnauthorizedError extends AppError {
-    constructor(message = 'Unauthorized access') {
-        super(message, 401, 'UNAUTHORIZED');
+    constructor(message = 'Unauthorized access', statusCode = 401, errorCode= 'UNAUTHORIZED', details = {}) {
+        super(message, statusCode, errorCode, details);
     }
 }
 
 class DuplicateRequestException extends AppError {
-    constructor(message = 'Duplicate request',  details = {}) {
-        super(message, 409, 'DUPLICATE_REQUEST', details);
+    constructor(message = 'Duplicate request', statusCode = 409, errorCode = 'DUPLICATE_REQUEST', details = {}) {
+        super(message, statusCode, errorCode, details);
+    }
+}
+
+class MissingRequiredFields extends AppError {
+    constructor(message = 'Missing required fields', statusCode = 400, errorCode = 'MISSING_FIELDS', details = {}) {
+        super(message, statusCode, errorCode, details);
     }
 }
 
@@ -36,5 +42,6 @@ module.exports = {
     InvalidCredentialsError,
     UnauthorizedError,
     DuplicateRequestException,
-    ValidationError
+    ValidationError,
+    MissingRequiredFields
 };

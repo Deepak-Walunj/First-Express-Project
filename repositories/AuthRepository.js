@@ -1,4 +1,4 @@
-const { DuplicateRequestException } = require("../core/exception");
+const { DuplicateRequestException, MissingRequiredFields } = require("../core/exception");
 const { setupLogging, getLogger } = require('../core/logger');
 
 setupLogging();
@@ -8,15 +8,15 @@ class AuthRepository {
         this.collection = collection;
     }
 
-    async findByEmail(email){
-        return this.collection.findOne({email: email});
+    async findByEmail(email, entity_type) {
+        return this.collection.findOne({email: email, entity_type: entity_type});
     }
 
     async createAuthEntity(data){
         const required_fields = ['hashed_password', 'entity_type']
         const missing_fields = required_fields.filter(field => !(field in data));
         if (missing_fields.length > 0) {
-        throw new Error(`Missing required fields: ${missing_fields.join(', ')}`);
+        throw new MissingRequiredFields('Missing required fields', 400, 'MISSING_FIELDS', missing_fields);
         }
         try{
         const result = await this.collection.insertOne(data);
@@ -24,7 +24,7 @@ class AuthRepository {
         }catch(err){
             if (err.code === 11000) {
                 logger.error({ err }, "Duplicate email error");
-                throw new DuplicateRequestException('User with this email already exists', err.keyValue);
+                throw new DuplicateRequestException('User with this email already exists', 409, 'DUPLICATE_USER', err.keyValue);
             }
             throw err;
         }

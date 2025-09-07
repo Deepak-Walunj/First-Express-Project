@@ -19,12 +19,11 @@ class AuthService {
             entity_type: data.entity_type
         });
         if (error) {
-            throw new InvalidCredentialsError(error.message);
+            throw new InvalidCredentialsError(error.message, 400, 'VALIDATION_ERROR', error.details);
         }
-        const existingUser = await this.authRepository.findByEmail(data.username);
-        logger.info(`Existing user check for email ${data.email}: ${existingUser}`);
+        const existingUser = await this.authRepository.findByEmail(data.email, data.entity_type);
         if (existingUser) {
-            throw new DuplicateRequestException('User already exists');
+            throw new DuplicateRequestException('User already exists', 409, 'DUPLICATE_USER', { email: data.email });
         }
         // const hashedPassword = await bcrypt.hash(value.password, 10);
         const auth_user = AuthUserSchema.validate({

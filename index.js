@@ -11,7 +11,7 @@ const { setupLogging, getLogger } = require('./core/logger');
 // Routes
 // const authRouter = require('./routes/authRoutes');
 const userRouter = require('./routes/userRoutes');
-// const companyRouter = require('./routes/companyRoutes');
+const adminRouter = require('./routes/adminRoutes');
 // const interviewRouter = require('./routes/interviewRoutes');
 // const dashboardRouter = require('./routes/dashboardRoutes');
 
@@ -39,7 +39,7 @@ const userRouter = require('./routes/userRoutes');
     // Routes
     // app.use(`${API_PREFIX}/auth`, authRouter);
     app.use(`/user`, userRouter);
-    // app.use(`${API_PREFIX}/company`, companyRouter);
+    app.use(`/admin`, adminRouter);
     // app.use(`${API_PREFIX}/interview`, interviewRouter);
     // app.use(`${API_PREFIX}/analytical-dashboard`, dashboardRouter);
 

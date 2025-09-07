@@ -8,7 +8,7 @@ logger.info('In errorHandler.js');
 // Handles custom AppError exceptions
 function appExceptionHandler(err, req, res, next) {
   if (err instanceof AppError) {
-    logger.error('App exception', { err });
+    logger.error({ errName: err.name, err }, 'App exception');
     return res.status(err.statusCode).json({
       success: false,
       message: err.message,
