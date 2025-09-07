@@ -26,16 +26,14 @@ class AuthService {
         if (existingUser) {
             throw new DuplicateRequestException('User already exists', 409, 'DUPLICATE_USER', { email: data.email });
         }
-        const hashedPassword = await hash_password(value.password);
+        // const hashedPassword = await hash_password(value.password);
         const auth_user = AuthEntitySchema.validate({
             userId:uuidv4(),
             email: value.email,
-            hashed_password: hashedPassword, 
+            hashed_password: value.password, 
             entity_type: value.entity_type
         }, { stripUnknown: true });
-        logger.info(`Creating user with data: ${JSON.stringify(auth_user.value)}`);
         const newUser = await this.authRepository.createAuthEntity(auth_user.value);
-        logger.info(`User registered with ID: ${newUser.userId} in AUTH_USER collection`);
         return newUser;
     }
     
@@ -45,8 +43,9 @@ class AuthService {
             logger.info(`No user found for email: ${data.email}`);
             return null;
         }
-        const isPasswordValid = await verify_password(data.password, user.hashed_password);
-        if (!isPasswordValid) {
+        // const isPasswordValid = await verify_password(data.password, user.hashed_password);
+        // if (!isPasswordValid) {
+        if (data.password !== user.hashed_password) {
             logger.info(`Incorrect password for email: ${data.email}`);
             return null;
         }

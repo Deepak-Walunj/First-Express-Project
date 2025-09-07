@@ -21,7 +21,6 @@ class UserService {
     if (error) {
         throw new InvalidCredentialsError(error.message, 400, 'VALIDATION_ERROR', error.details);
     }
-    logger.info(`Creating user profile with data: ${JSON.stringify(value)}`);
     const profile = await this.userRepository.createProfile(value);
     return profile
     }
