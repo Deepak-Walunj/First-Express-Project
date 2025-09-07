@@ -8,6 +8,15 @@ const registerAdminSchema = Joi.object({
     entity_type: Joi.string().valid(EntityType.ADMIN).required().messages({"any.only": "Entity type must be ADMIN", "string.empty": "Entity type is required"}),
 })
 
+class StandardResponse {
+    constructor(success=true, message=null, data=null){
+        this.success = success;
+        this.message = message;
+        this.data = data;
+    }
+}
+
 module.exports = {
-    registerAdminSchema
+    registerAdminSchema,
+    StandardResponse
 }

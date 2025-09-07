@@ -4,6 +4,7 @@ const { setupLogging, getLogger } = require('../core/logger');
 const { getUserService } = require('../core/deps');
 const { ValidationError } = require('../core/exception.js')
 const { registerUserSchema } = require('../schemas/userSchema');
+const { StandardResponse } = require('../schemas/adminSchema');
 
 setupLogging();
 const logger = getLogger("user-router");
@@ -15,11 +16,7 @@ router.post('/register', async (req, res, next) => {
     return next(new ValidationError(error.message, 400, 'VALIDATION_ERROR', error.details));
   }
   const user = await userService.registerUser(value);
-  return res.status(201).json({
-    success: true,
-    message: 'User registered successfully',
-    data: user
-  })
+  return res.json(new StandardResponse(true, 'User registered successfully', user))
 });
 
 module.exports = router;

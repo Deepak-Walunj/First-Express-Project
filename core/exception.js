@@ -37,11 +37,19 @@ class MissingRequiredFields extends AppError {
     }
 }
 
+class ForbiddenError extends AppError {
+    constructor(message = 'Forbidden', statusCode = 403, errorCode = 'FORBIDDEN', details = {}){
+        super(message, statusCode, errorCode, details)
+    }
+
+}
+
 module.exports = {
     AppError,
     InvalidCredentialsError,
     UnauthorizedError,
     DuplicateRequestException,
     ValidationError,
-    MissingRequiredFields
+    MissingRequiredFields,
+    ForbiddenError
 };

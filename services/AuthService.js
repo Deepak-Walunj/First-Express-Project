@@ -9,8 +9,9 @@ const bcrypt = require('bcrypt');
 setupLogging();
 const logger = getLogger("auth-service");
 class AuthService {
-    constructor({ authRepository }) {
+    constructor({ authRepository, cacheClient }) {
         this.authRepository = authRepository;
+        this.cache = cacheClient;
     }
     async registerEntity(data) {
         const { error, value } = EntityRegisterSchema.validate({
@@ -71,6 +72,18 @@ class AuthService {
         const access_token=create_access_token(data);
         const refresh_token=create_refresh_token(data);
         return { access_token, refresh_token  };
+    }
+
+    async get_user_by_id(userId) {
+        let user = await this.cache.get(userId)
+        if (user) {
+            return JSON.parse(user)
+        }
+        user = await this.authRepository.findById(userId);
+        if (user) {
+            await this.cache.set(userId, JSON.stringify(user),{ EX: 60*5 }) // Cache for 1 hour
+        }
+        return user;
     }
 }
 

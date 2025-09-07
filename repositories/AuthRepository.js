@@ -30,6 +30,17 @@ class AuthRepository {
             throw err;
         }
     }
+
+    async findById(userId) {
+        console.info("Finding user by ID", { userId });
+        const userDoc = await this.collection.findOne({[AuthEntityFields.userId] : userId }) // lean() for plain object
+        if (userDoc) {
+        console.info("User found", { userId: userDoc.userId });
+        return userDoc; // map to DTO if needed
+        }
+        console.info("User not found", { userId });
+        return null;
+    }
 }
 
 module.exports = AuthRepository;

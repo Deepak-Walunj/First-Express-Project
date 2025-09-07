@@ -23,7 +23,7 @@ class BaseResponse {
 }
 
 class TokenData {
-    constructor(access_token, token_type="bearer") {
+    constructor(access_token, token_type="Bearer") {
         this.access_token = access_token;
         this.token_type = token_type;
     }
