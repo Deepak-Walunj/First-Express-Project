@@ -9,7 +9,7 @@ const requestId = require('./middleware/requestId');
 const { setupLogging, getLogger } = require('./core/logger');
 
 // Routes
-// const authRouter = require('./routes/authRoutes');
+const authRouter = require('./routes/authRoutes');
 const userRouter = require('./routes/userRoutes');
 const adminRouter = require('./routes/adminRoutes');
 // const interviewRouter = require('./routes/interviewRoutes');
@@ -37,7 +37,7 @@ const adminRouter = require('./routes/adminRoutes');
     }));
 
     // Routes
-    // app.use(`${API_PREFIX}/auth`, authRouter);
+    app.use(`/auth`, authRouter);
     app.use(`/user`, userRouter);
     app.use(`/admin`, adminRouter);
     // app.use(`${API_PREFIX}/interview`, interviewRouter);

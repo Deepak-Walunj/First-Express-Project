@@ -40,7 +40,6 @@ function validationExceptionHandler(err, req, res, next) {
 
 // Handles unhandled errors
 function genericExceptionHandler(err, req, res, next) {
-  logger.error('Unhandled exception', { err });
   const response = {
     success: false,
     message: 'Internal server error',
@@ -51,6 +50,7 @@ function genericExceptionHandler(err, req, res, next) {
     message: err.message,
     stack: err.stack,
   };
+  logger.error({ errName: err.name, err }, 'Unhandled exception');
   res.status(500).json(response);
 }
 

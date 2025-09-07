@@ -1,5 +1,6 @@
 const { DuplicateRequestException, MissingRequiredFields } = require("../core/exception");
 const { setupLogging, getLogger } = require('../core/logger');
+const { AuthEntityFields } = require("../models/authModel");
 
 setupLogging();
 const logger = getLogger("auth-repo");
@@ -9,7 +10,7 @@ class AuthRepository {
     }
 
     async findByEmail(email, entity_type) {
-        return this.collection.findOne({email: email, entity_type: entity_type});
+        return this.collection.findOne({[AuthEntityFields.email]: email, [AuthEntityFields.entity_type]: entity_type});
     }
 
     async createAuthEntity(data){
