@@ -4,13 +4,13 @@ const {v4: uuidv4} = require("uuid")
 const now = () => new Date().toISOString();
 
 const AdminProfileFields = Object.freeze({
-    userId: 'userId',
+    adminId: 'userId',
     full_name: 'full_name',
     email: 'email',
 })
 
 const AdminProfileSchema = Joi.object({
-    [AdminProfileFields.userId]: Joi.string().guid({ version: "uuidv4" }).default(() => uuidv4()),
+    [AdminProfileFields.adminId]: Joi.string().guid({ version: "uuidv4" }).default(() => uuidv4()),
     [AdminProfileFields.full_name]: Joi.string().required(),
     [AdminProfileFields.email]: Joi.string().email().required(),
     createdAt: Joi.date().default(() => now()).description("Timestamp when the user was created"),

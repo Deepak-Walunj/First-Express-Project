@@ -22,8 +22,8 @@ router.post('/register', async (req, res, next) => {
 
 router.get('/me', allowedEntities(EntityType.ADMIN), async (req, res, next) => {
   const adminService = getAdminService();
-  const userId = req.user.userId
-  const profile = await adminService.getUserProfile(userId)
+  const adminId = req.user.userId
+  const profile = await adminService.getAdminProfile(adminId)
   logger.info(`Fetched profile for user: ${profile}`);
   return res.json(new StandardResponse(true, 'User profile fetched successfully', profile))
 })
@@ -40,7 +40,15 @@ router.delete('/me', allowedEntities(EntityType.ADMIN), async (req, res, next) =
 })
 
 router.get('/users', allowedEntities(EntityType.ADMIN), async (req, res, next) => {
-    return res.json (new StandardResponse(true, 'Authentication working', null))
+  const adminService = getAdminService()
+  const { search = null, page = 1, limit = 10 } = req.query
+  const users = await adminService.getAllUsers({
+    searchStr: search,
+    page: parseInt(page),
+    limit: parseInt(limit)
+  })
+  logger.info(`Fetched users from DB: ${JSON.stringify(users)}`);
+  return res.json (new StandardResponse(true, 'All users fetched successfully', { page, limit, users }))
 })
 
 module.exports = router

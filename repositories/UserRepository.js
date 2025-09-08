@@ -38,6 +38,38 @@ class UserRepository {
         return true;
     }
 
+    async getAllUsers({ searchStr = null, page = 1, limit = 10 }){
+        const pipeline = []
+
+        if (searchStr) {
+            pipeline.push({
+                $match: {
+                    $or: [
+                        {[UserProfileFields.full_name]: { $regex: searchStr, $options: 'i' }},
+                        {[UserProfileFields.email]: { $regex: searchStr, $options: 'i' }},
+                    ]
+                }
+            })
+        }
+        pipeline.push({$skip: (page-1)*limit})
+        pipeline.push({$limit: limit})
+        pipeline.push({
+            $project: {
+                _id: 0,
+                [UserProfileFields.userId]: 1,
+                [UserProfileFields.full_name]: 1,
+                [UserProfileFields.email]: 1,
+            }
+        })
+        try{
+            const cursor = this.collection.aggregate(pipeline);
+            const results = await cursor.toArray();
+            return results
+        }catch(err){
+            logger.error(`Error fetching users: ${err.message}`);
+            throw err;
+        }
+    }
 }
 
 module.exports = UserRepository;

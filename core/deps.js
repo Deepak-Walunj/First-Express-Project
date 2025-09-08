@@ -43,7 +43,7 @@ class DependencyStorage{
         
         this.authService = new AuthService({ authRepository: this.authRepo, cacheClient: this._cache });
         this.userService = new UserService({ userRepository: this.userRepo, auth_service: this.authService });
-        this.adminService = new AdminService({ adminRepository: this.adminRepo, auth_service: this.authService });
+        this.adminService = new AdminService({ adminRepository: this.adminRepo, auth_service: this.authService, user_service: this.userService });
         }
     getAuthRepository() {
         return this.authRepo;

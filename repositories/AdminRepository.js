@@ -1,6 +1,7 @@
 const { setupLogging, getLogger } = require('../core/logger')
 const { AdminProfileSchema, AdminProfileFields } = require('../models/adminModel')
 const { UnprocessableEntityError, NotFoundError } = require('../core/exception');
+const { USERS } = require('../core/collections');
 
 setupLogging()
 const logger = getLogger('admin-repo')
@@ -15,10 +16,10 @@ class AdminRepository{
         return { ...adminData, _id: result.insertedId }
     }
 
-    async findUserByUserId(userId) {
-        const result = await this.collection.findOne({ [AdminProfileFields.userId]: userId });
+    async findAdminByAdminId(adminId) {
+        const result = await this.collection.findOne({ [AdminProfileFields.adminId]: adminId });
         if (!result) {
-            throw new NotFoundError('User not found', 404, 'USER_NOT_FOUND', { userId });
+            throw new NotFoundError('User not found', 404, 'USER_NOT_FOUND', { adminId });
         }
         const { error, value } = AdminProfileSchema.validate(result, { stripUnknown: true });
         if (error) {
@@ -27,10 +28,10 @@ class AdminRepository{
         return value;
     }
 
-    async deleteUserByUserId(userId) {
-        const result = await this.collection.deleteOne({ [AdminProfileFields.userId]: userId });
+    async deleteAdminByAdminId(adminId) {
+        const result = await this.collection.deleteOne({ [AdminProfileFields.adminId]: adminId });
         if (result.deletedCount === 0) {
-            throw new NotFoundError('User not found', 404, 'USER_NOT_FOUND', { userId });
+            throw new NotFoundError('User not found', 404, 'USER_NOT_FOUND', { adminId });
         }
         return true;
     }

@@ -6,9 +6,10 @@ setupLogging();
 const logger = getLogger('admin-service')
 
 class AdminService {
-    constructor({ adminRepository, auth_service }) {
+    constructor({ adminRepository, auth_service, user_service }) {
         this.adminRepository = adminRepository;
         this.auth_service = auth_service;
+        this.user_service = user_service;
     }
 
     async registerAdmin(data) {
@@ -26,16 +27,27 @@ class AdminService {
         return profile
     }
 
-    async getUserProfile(userId) {
-        const profile = await this.adminRepository.findUserByUserId( userId );
+    async getAdminProfile(adminId) {
+        const profile = await this.adminRepository.findAdminByAdminId( adminId );
         return profile;
     }
 
-    async deleteUser(userId) {
-        const admin = await this.adminRepository.findUserByUserId(userId);
-        const result_authRepo = await this.auth_service.deleteUserByUserId(admin.userId);
-        const result_adminRepo = await this.adminRepository.deleteUserByUserId(admin.userId);
+    async deleteUser(adminId) {
+        const admin = await this.adminRepository.findAdminByAdminId(adminId);
+        const result_authRepo = await this.auth_service.deleteEntityByEntityId(admin.adminId);
+        const result_adminRepo = await this.adminRepository.deleteAdminByAdminId(admin.adminId);
         return result_authRepo === result_adminRepo;
+    }
+
+    async getAllUsers({
+        searchStr = null,
+        page = 1,
+        limit = 10
+    }) {
+        const users = await this.user_service.getAllUsers({
+            searchStr, page, limit
+        });
+        return users
     }
 }
 
