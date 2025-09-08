@@ -85,6 +85,11 @@ class AuthService {
         }
         return user;
     }
+
+    async deleteUserByUserId(userId) {
+        const result = await this.authRepository.deleteByUserId(userId);
+        return result;
+    }
 }
 
 module.exports = AuthService;

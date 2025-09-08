@@ -29,6 +29,13 @@ class UserService {
         const profile = await this.userRepository.findUserByUserId( userId );
         return profile;
     }
+
+    async deleteUser(userId) {
+        const user = await this.userRepository.findUserByUserId(userId);
+        const result_authRepo = await this.auth_service.deleteUserByUserId(user.userId);
+        const result_userRepo = await this.userRepository.deleteUserByUserId(user.userId);
+        return result_authRepo === result_userRepo;
+    }
 }
 
 module.exports = UserService;

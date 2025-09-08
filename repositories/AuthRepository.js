@@ -1,4 +1,4 @@
-const { DuplicateRequestException, MissingRequiredFields } = require("../core/exception");
+const { DuplicateRequestException, MissingRequiredFields, NotFoundError } = require("../core/exception");
 const { setupLogging, getLogger } = require('../core/logger');
 const { AuthEntityFields } = require("../models/authModel");
 
@@ -10,7 +10,11 @@ class AuthRepository {
     }
 
     async findByEmail(email, entity_type) {
-        return this.collection.findOne({[AuthEntityFields.email]: email, [AuthEntityFields.entity_type]: entity_type});
+        const result = this.collection.findOne({[AuthEntityFields.email]: email, [AuthEntityFields.entity_type]: entity_type});
+        if (!result){
+            throw new NotFoundError('User not found', 404, 'USER_NOT_FOUND', {email, entity_type});
+        }
+        return result;
     }
 
     async createAuthEntity(data){
@@ -32,14 +36,19 @@ class AuthRepository {
     }
 
     async findById(userId) {
-        console.info("Finding user by ID", { userId });
-        const userDoc = await this.collection.findOne({[AuthEntityFields.userId] : userId }) // lean() for plain object
-        if (userDoc) {
-        console.info("User found", { userId: userDoc.userId });
-        return userDoc; // map to DTO if needed
+        const result = await this.collection.findOne({[AuthEntityFields.userId] : userId }) // lean() for plain object
+        if (!result) {
+            throw new NotFoundError('User not found', 404, 'USER_NOT_FOUND', {userId});
         }
-        console.info("User not found", { userId });
-        return null;
+        return result;
+    }
+
+    async deleteByUserId(userId) {
+        const result = await this.collection.deleteOne({ [AuthEntityFields.userId]: userId });
+        if (result.deletedCount === 0) {
+            throw new NotFoundError('User not found', 404, 'USER_NOT_FOUND', { userId });
+        }
+        return true;
     }
 }
 

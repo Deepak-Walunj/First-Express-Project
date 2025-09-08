@@ -50,6 +50,12 @@ class UnprocessableEntityError extends AppError {
     }
 }
 
+class NotFoundError extends AppError {
+    constructor(message = 'Resource Not Found', statusCode = 404, errorCode = 'NOT_FOUND', details = {}) {
+        super(message, statusCode, errorCode, details);
+    }
+}
+
 module.exports = {
     AppError,
     InvalidCredentialsError,
@@ -58,5 +64,6 @@ module.exports = {
     ValidationError,
     MissingRequiredFields,
     ForbiddenError,
-    UnprocessableEntityError
+    UnprocessableEntityError,
+    NotFoundError
 };
