@@ -25,6 +25,18 @@ class AdminService {
         const profile = await this.adminRepository.createProfile(value);
         return profile
     }
+
+    async getUserProfile(userId) {
+        const profile = await this.adminRepository.findUserByUserId( userId );
+        return profile;
+    }
+
+    async deleteUser(userId) {
+        const admin = await this.adminRepository.findUserByUserId(userId);
+        const result_authRepo = await this.auth_service.deleteUserByUserId(admin.userId);
+        const result_adminRepo = await this.adminRepository.deleteUserByUserId(admin.userId);
+        return result_authRepo === result_adminRepo;
+    }
 }
 
 module.exports = AdminService;

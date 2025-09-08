@@ -17,7 +17,26 @@ router.post('/register', async (req, res, next) => {
         return next(new ValidationError(error.message, 400, 'VALIDATION_ERROR', error.details))
     }
     const admin = await adminService.registerAdmin(value)
-    return res.json (StandardResponse(true, 'Admin registered successfully', admin))
+    return res.json (new StandardResponse(true, 'Admin registered successfully', admin))
+})
+
+router.get('/me', allowedEntities(EntityType.ADMIN), async (req, res, next) => {
+  const adminService = getAdminService();
+  const userId = req.user.userId
+  const profile = await adminService.getUserProfile(userId)
+  logger.info(`Fetched profile for user: ${profile}`);
+  return res.json(new StandardResponse(true, 'User profile fetched successfully', profile))
+})
+
+router.delete('/me', allowedEntities(EntityType.ADMIN), async (req, res, next) => {
+  const adminService = getAdminService()
+  const userId = req.user.userId
+  const result = await adminService.deleteUser(userId)
+  if (!result){
+    logger.error(`Failed to delete user with ID: ${userId}`);
+  }
+  logger.info(`Deleted user with ID: ${userId}`);
+  return res.json(new StandardResponse(true, 'Admin deleted successfully'))
 })
 
 router.get('/users', allowedEntities(EntityType.ADMIN), async (req, res, next) => {

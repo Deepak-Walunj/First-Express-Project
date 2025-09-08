@@ -1,6 +1,8 @@
 const Joi = require("joi");
 const {v4: uuidv4} = require("uuid");
 
+const now = () => new Date().toISOString();
+
 const UserProfileFields = Object.freeze({
   userId: 'userId',
   full_name: 'full_name',
