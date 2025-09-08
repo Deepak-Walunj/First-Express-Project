@@ -44,6 +44,12 @@ class ForbiddenError extends AppError {
 
 }
 
+class UnprocessableEntityError extends AppError {
+    constructor(message = 'Unprocessable Entity', statusCode = 422, errorCode = 'UNPROCESSABLE_ENTITY', details = {}) {
+        super(message, statusCode, errorCode, details);
+    }
+}
+
 module.exports = {
     AppError,
     InvalidCredentialsError,
@@ -51,5 +57,6 @@ module.exports = {
     DuplicateRequestException,
     ValidationError,
     MissingRequiredFields,
-    ForbiddenError
+    ForbiddenError,
+    UnprocessableEntityError
 };

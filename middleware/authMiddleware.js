@@ -35,11 +35,9 @@ function allowedEntities(entity_type=null){
                 return next(new UnauthorizedError("Invalid token payload", 401, "INVALID_TOKEN_PAYLOAD"));
             }
             const user = await authService.get_user_by_id(userId)
-            logger.info(`Authenticated user: ${JSON.stringify(user)}`);
             if (!user) {
                 return next(new UnauthorizedError("User not found", 401, "USER_NOT_FOUND", userId));
             }
-            logger.info(`User entity type: ${user.entity_type} and required entity type: ${entity_type}`);
             if (entity_type && user.entity_type !== entity_type) {
                 return next(new ForbiddenError("You don't have permission", 403, "FORBIDDEN", payload.entity_type));
             }

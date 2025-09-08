@@ -24,6 +24,11 @@ class UserService {
     const profile = await this.userRepository.createProfile(value);
     return profile
     }
+
+    async getUserProfile(userId) {
+        const profile = await this.userRepository.findUserByUserId( userId );
+        return profile;
+    }
 }
 
 module.exports = UserService;
